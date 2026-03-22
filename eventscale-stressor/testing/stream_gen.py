@@ -226,7 +226,7 @@ def _worker(
 # ═══════════════════════════════════════════════════════════════════════════
 #  CONSUMER / STATS THREAD
 # ═══════════════════════════════════════════════════════════════════════════
-# ==================== ADD THIS AT TOP ====================
+
 from kafka import KafkaProducer
 import json
 
@@ -235,7 +235,7 @@ producer = KafkaProducer(
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
 
-# ==================== MODIFY THIS CLASS ====================
+
 
 class StreamConsumer:
     def __init__(self, queue, output_file, print_sample):
