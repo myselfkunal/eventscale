@@ -27,20 +27,12 @@ from collections import deque
 from typing import Generator
 from kafka import KafkaProducer
 import json
+from typing import Any
 
 producer = KafkaProducer(
     bootstrap_servers='localhost:9092',
     value_serializer=lambda v: json.dumps(v).encode('utf-8')
 )
-# ── optional fast-JSON (falls back to stdlib) ──────────────────────────────
-try:
-    import orjson as _json_lib
-    def _dumps(obj: dict) -> str:
-        return _json_lib.dumps(obj).decode()
-except ImportError:
-    _json_lib = None
-    def _dumps(obj: dict) -> str:
-        return json.dumps(obj, separators=(',', ':'))
 
 
 # ═══════════════════════════════════════════════════════════════════════════
@@ -199,7 +191,7 @@ _GEN_FNS = [gen_env_sensor, gen_energy_meter, gen_gps_tracker, gen_vibration, ge
 
 def _worker(
     queue: mp.Queue,
-    stop_event: mp.Event,
+    stop_event: Any,
     worker_id: int,
     batch_size: int,
 ):
@@ -210,7 +202,7 @@ def _worker(
 
     while not stop_event.is_set():
         fn = next(gen_cycle)
-        batch.append(_dumps(fn(rng)))
+        batch.append(json.dumps(fn(rng)))
         if len(batch) >= batch_size:
             queue.put(batch, block=True, timeout=1.0)
             batch = []

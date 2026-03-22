@@ -3,8 +3,6 @@
 Thumbs.db
 
 .vscode/
-.idea/
-*.iml
 
 
 venv310/
@@ -18,14 +16,3 @@ logs/
 
 .env
 .env.*
-
-
-kafka/data/
-kafka/logs/
-cassandra/data/
-cassandra/commitlog/
-cassandra/saved_caches/
-
-
-*.tmp
-*.swp
